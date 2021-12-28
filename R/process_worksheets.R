@@ -26,17 +26,6 @@ test_sheet <- read_sheet("1j1lbNBOFVCyKuGLXUYDNSH0r_8Z5lV6JmFFgQOhk5Nw",
                          sheet = "2021-11-19_run_2",
                          col_names = FALSE,
                          col_types = "c")
-cell_date <- ymd(test_sheet[1, 3])
-
-test_string <- (paste(test_sheet[1, 3],
-                      test_sheet[3, 3]))
-Sys.timezone() 
-OlsonNames()
-force_tz(ymd_hm(test_string), tzone = "America/Phoenix")
-
-ymd(cell_date)
-
-
 
 process_worksheet <- function(input_sheet_id){
   tab_list <- sheet_properties(input_sheet_id)$name
@@ -72,11 +61,6 @@ process_worksheet <- function(input_sheet_id){
     cell_target_temp <- as.double(current_tab[10, 6])
     cell_thermocouple_position <- as.character(current_tab[11, 6])
     
-    print(cell_lid_temp)
-    print(cell_base_temp)
-    print(cell_stage_heater)
-    print(cell_target_temp)
-    print(cell_thermocouple_position)
   }
 }
 
