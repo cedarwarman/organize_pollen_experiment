@@ -28,6 +28,7 @@ test_sheet <- read_sheet("1j1lbNBOFVCyKuGLXUYDNSH0r_8Z5lV6JmFFgQOhk5Nw",
                          col_types = "c")
 
 process_worksheet <- function(input_sheet_id){
+  output_df <- data.frame()
   tab_list <- sheet_properties(input_sheet_id)$name
   print(tab_list)
   for (x in seq(1:length(tab_list))){
@@ -35,8 +36,10 @@ process_worksheet <- function(input_sheet_id){
                               sheet = tab_list[x],
                               col_names = FALSE,
                               col_types = 'c')
+    
+    # Pulling out all the metadata that's the same for each plate
     cell_date <- ymd(current_tab[1, 3])
-    cell_run <- as.integer(current_tab[2, 2])
+    cell_run <- as.integer(current_tab[2, 3])
     cell_pollen_collect_start <- force_tz(ymd_hm(paste(current_tab[1, 3],
                                                        current_tab[3, 3])), 
                                           tzone = "America/Phoenix")
@@ -61,11 +64,49 @@ process_worksheet <- function(input_sheet_id){
     cell_target_temp <- as.double(current_tab[10, 6])
     cell_thermocouple_position <- as.character(current_tab[11, 6])
     
+    # Getting the accession ID for each well (each well will become a row)
+    well_ids <- c(
+      "A1", "A2", "A3", "A4", "A5", "A6",
+      "B1", "B2", "B3", "B4", "B5", "B6",
+      "C1", "C2", "C3", "C4", "C5", "C6",
+      "D1", "D2", "D3", "D4", "D5", "D6"
+    )
+    well_contents <- as.character(c(
+      current_tab[16, 2], current_tab[16, 3], current_tab[16, 4], current_tab[16, 5], current_tab[16, 6], current_tab[16, 7],
+      current_tab[17, 2], current_tab[17, 3], current_tab[17, 4], current_tab[17, 5], current_tab[17, 6], current_tab[17, 7],
+      current_tab[18, 2], current_tab[18, 3], current_tab[18, 4], current_tab[18, 5], current_tab[18, 6], current_tab[18, 7],
+      current_tab[19, 2], current_tab[19, 3], current_tab[19, 4], current_tab[19, 5], current_tab[19, 6], current_tab[19, 7]
+    ))
+    
+    for (y in seq(1, length(well_ids))){
+      output_row <- data.frame(date = cell_date,
+                               run = cell_run,
+                               t_pollen_collect_start = cell_pollen_collect_start,
+                               t_pollen_collect_end = cell_pollen_collect_end,
+                               t_pgm_added = cell_pgm_added,
+                               t_pollen_on_scope = cell_pollen_on_scope,
+                               t_exp_start = cell_exp_start,
+                               t_exp_end = cell_exp_end,
+                               temp_lid = cell_lid_temp,
+                               temp_base = cell_base_temp,
+                               temp_stage = cell_stage_heater,
+                               temp_target = cell_target_temp,
+                               thermocouple_pos = cell_thermocouple_position,
+                               well = well_ids[y],
+                               accession = well_contents[y])
+      output_df <- rbind(output_df, output_row)
+    }
+    
   }
+  return(output_df)
 }
 
-process_worksheet(december_id)
+test_output_df <- process_worksheet(december_id)
 
+
+
+
+test_summary <- test_output_df %>% group_by(accession) %>% summarize(n = n())
 
 
 
