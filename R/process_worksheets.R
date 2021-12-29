@@ -4,7 +4,6 @@
 # convoluted, but it is a compromise between complexity running this sheet 
 # and ease of use when actually doing the experiment. 
 
-library(tidyverse)
 library(googlesheets4)
 library(lubridate)
 
