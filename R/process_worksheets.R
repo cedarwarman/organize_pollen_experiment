@@ -8,24 +8,23 @@ library(tidyverse)
 library(googlesheets4)
 library(lubridate)
 
-gs4_deauth()
+# Adding my Google service account credentials
+gs4_auth(path = "~/.credentials/google_sheets_api/service_account.json")
 
-# Check to see if sheet has already been finished, then if tab has already 
-# been finished
 
-# Add some kind of file in the data folder that keeps track of when things 
-# are finished?
-
+# Reading the sheets and organizing the data ------------------------------
 # Function to go through the tabs in a Google sheet and pull out the relevant 
 # data. Do a row for each well. Rows will be combined into a giant long table 
 # the uploaded to Google Sheets.
 
-december_id <- "12NXw2dRH6iRtq62KU3_w7R3FGQ5StdDr6pkfCuLP56Y"
 
-test_sheet <- read_sheet("1j1lbNBOFVCyKuGLXUYDNSH0r_8Z5lV6JmFFgQOhk5Nw",
-                         sheet = "2021-11-19_run_2",
-                         col_names = FALSE,
-                         col_types = "c")
+# Testing
+
+# test_sheet <- read_sheet("1j1lbNBOFVCyKuGLXUYDNSH0r_8Z5lV6JmFFgQOhk5Nw",
+#                          sheet = "2021-11-19_run_2",
+#                          col_names = FALSE,
+#                          col_types = "c")
+
 
 process_worksheet <- function(input_sheet_id){
   output_df <- data.frame()
@@ -40,6 +39,7 @@ process_worksheet <- function(input_sheet_id){
     # Pulling out all the metadata that's the same for each plate
     cell_date <- ymd(current_tab[1, 3])
     cell_run <- as.integer(current_tab[2, 3])
+    cell_person <- as.character(current_tab[1, 6])
     cell_pollen_collect_start <- force_tz(ymd_hm(paste(current_tab[1, 3],
                                                        current_tab[3, 3])), 
                                           tzone = "America/Phoenix")
@@ -81,6 +81,7 @@ process_worksheet <- function(input_sheet_id){
     for (y in seq(1, length(well_ids))){
       output_row <- data.frame(date = cell_date,
                                run = cell_run,
+                               person = cell_person,
                                t_pollen_collect_start = cell_pollen_collect_start,
                                t_pollen_collect_end = cell_pollen_collect_end,
                                t_pgm_added = cell_pgm_added,
@@ -101,13 +102,33 @@ process_worksheet <- function(input_sheet_id){
   return(output_df)
 }
 
-test_output_df <- process_worksheet(december_id)
+# Processing the different spreadsheets (I was going to make it check to see 
+# if it has already been processed, but it doesn't take very long so I'm just 
+# leaving it).
+sheets <- list(November = "1j1lbNBOFVCyKuGLXUYDNSH0r_8Z5lV6JmFFgQOhk5Nw",
+               December = "12NXw2dRH6iRtq62KU3_w7R3FGQ5StdDr6pkfCuLP56Y")
+
+output_df = data.frame()
+for (z in seq(1, length(sheets))){
+  loop_df <- process_worksheet(sheets[[z]])
+  output_df <- rbind(output_df, loop_df)
+}
 
 
+# Uploading the organized data --------------------------------------------
+destination_sheet = "1yQ5yAKiL6BzwZ-wH-Q44RoUEwMZztTYafzdvVylq6fo"
+write_sheet(data = output_df, 
+            ss = destination_sheet,
+            sheet = "output_df")
 
 
-test_summary <- test_output_df %>% group_by(accession) %>% summarize(n = n())
+# Looking at the data -----------------------------------------------------
+# Just a little summary to see how things look
+# summary <- output_df %>% group_by(accession, temp_target) %>% summarize(n = n())
+
+# I will make another script to produce a data entry Google Sheet to manually
+# look at the pollen counts for each well, then add that data to a visualization
+# and counting app so I know which accessions need more plants
 
 
-
-
+       
