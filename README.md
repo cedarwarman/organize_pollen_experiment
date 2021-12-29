@@ -14,13 +14,5 @@ For authorization, a JSON file identifying a Google service account with access 
 
 - R 4.0.5
 - lubridate 1.7.10
-- forcats 0.5.1
-- stringr 1.4.0
 - dplyr 1.0.7
-- purrr 0.3.4
-- readr 1.4.0
-- tidyr 1.1.3
-- tibble 3.1.3
-- ggplot2 3.3.3
-- tidyverse 1.3.1
 - googlesheets4 1.0.0
