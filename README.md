@@ -3,6 +3,11 @@ R project to organize pollen experiment worksheets.
 
 ## Contents
 
+### run_pollen_organizing_R_scripts.sh
+This bash script runs the following two R scripts. I have set it up to run each night using the following crontab line:
+
+    0 20 * * * bash ~/git/organize_pollen_experiment/bash/run_pollen_organizing_R_scripts.sh
+
 ### process_worksheets.R
 **This R script is run first.** It pulls data from a series of Google sheets that are formatted to be easy to use while doing experiments, but are not great for computation. The output is a single spreadsheet in a machine-readable format containing all the metadata describing which accessions have been imaged.
 
