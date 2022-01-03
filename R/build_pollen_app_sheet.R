@@ -14,6 +14,7 @@
 
 library(googlesheets4)
 library(dplyr)
+library(tidyr)
 
 # Adding my Google service account credentials
 gs4_auth(path = "~/.credentials/google_sheets_api/service_account.json")
@@ -21,6 +22,7 @@ gs4_auth(path = "~/.credentials/google_sheets_api/service_account.json")
 
 # Loading the sheets ------------------------------------------------------
 bench_url <- "1eVTw35VZk2Kidy1fWb-ob0lhmec1iWHUZ_b2zJ70FHg"
+counting_url <- "10_lG9N0wGvgOmxDGuX5PXILB7QwC7m6CuYXzi78Qe3Q"
 worksheet_url <- "1yQ5yAKiL6BzwZ-wH-Q44RoUEwMZztTYafzdvVylq6fo"
 greenhouse_info_url <- "1ZJxIig0rGVVXgvLTO8SjPY2A9y3itntssLxHtGn7mSU"
 flower_url <- "1YAbstZeZfTu6bItHQXVr02WrD1JmNNvn4dd-m88omLY"
@@ -34,9 +36,9 @@ bench_layout <- bind_rows(lapply(tail(sheet_names(bench_url), 4), function(x){
 flower_measurements <- bind_rows(lapply(sheet_names(flower_url), function(x){
   read_sheet(flower_url, sheet = x)
 }))
-flower_measurements <- read_sheet(flower_url)
-worksheets <- read_sheet(worksheet_url)
+pollen_counts <- read_sheet(counting_url)
 greenhouse_info <- read_sheet(greenhouse_info_url)
+worksheets <- read_sheet(worksheet_url)
 
 
 # Building the app data sheet ---------------------------------------------
@@ -60,6 +62,38 @@ greenhouse_info <- read_sheet(greenhouse_info_url)
 #         ┌─────┐  ┌─────┐                │ 1  │ 2  │ 3  │ 4  │ 5  │
 #       1 │     │  │     │ 5              └────┴────┴────┴────┴────┘
 #         └─────┘  └─────┘
+
+app_df <- bench_layout
+
+# Adding counts for number of good image sequences (correct amount of pollen)
+# at control and heat stress. First, adding accession name to the 
+# pollen_counts sheet.
+pollen_counts <- left_join(pollen_counts, 
+  worksheets[ , c("date", "run", "well", "temp_target", "accession")])
+
+# Only keeping the good runs ("g") 
+pollen_counts <- pollen_counts[! is.na(pollen_counts$count), ]
+pollen_counts <- pollen_counts[pollen_counts$count == "g", ]
+
+# Summarizing the counts
+pollen_counts <- pollen_counts %>%
+  group_by(accession, temp_target) %>%
+  summarize(good_run_count = n())
+
+# Making pollen_counts wider for joining with the app_df
+pollen_counts <- pollen_counts %>%
+  pivot_wider(id_cols = accession, 
+              names_from = temp_target,
+              values_from = good_run_count,
+              names_prefix = "good_run_count_")
+pollen_counts[is.na(pollen_counts)] <- 0
+
+# Joining the counts to the app_df
+app_df <- left_join(app_df, pollen_counts)
+app_df[is.na(app_df)] <- 0
+
+# Adding flower measurement counts
+# Group by accession, delete na's, count rows, left join
 
 
 
