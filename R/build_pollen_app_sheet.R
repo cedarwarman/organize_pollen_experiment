@@ -25,10 +25,18 @@ worksheet_url <- "1yQ5yAKiL6BzwZ-wH-Q44RoUEwMZztTYafzdvVylq6fo"
 greenhouse_info_url <- "1ZJxIig0rGVVXgvLTO8SjPY2A9y3itntssLxHtGn7mSU"
 flower_url <- "1YAbstZeZfTu6bItHQXVr02WrD1JmNNvn4dd-m88omLY"
 
-bench_layout <- read_sheet(bench_url)
+# Need to read all the tabs in the bench layouts sheet
+bench_layout <- bind_rows(lapply(tail(sheet_names(bench_url), 4), function(x){
+  read_sheet(bench_url, sheet = x)
+}))
+
+# Same for the flower measurements
+flower_measurements <- bind_rows(lapply(sheet_names(flower_url), function(x){
+  read_sheet(flower_url, sheet = x)
+}))
+flower_measurements <- read_sheet(flower_url)
 worksheets <- read_sheet(worksheet_url)
 greenhouse_info <- read_sheet(greenhouse_info_url)
-flower_meaasurements <- read_sheet(flower_url)
 
 
 # Building the app data sheet ---------------------------------------------
