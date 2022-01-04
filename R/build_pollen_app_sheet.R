@@ -15,6 +15,7 @@
 library(googlesheets4)
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 
 # Adding my Google service account credentials
 gs4_auth(path = "~/.credentials/google_sheets_api/service_account.json")
@@ -94,6 +95,130 @@ app_df[is.na(app_df)] <- 0
 
 # Adding flower measurement counts
 # Group by accession, delete na's, count rows, left join
+flower_measurements <- flower_measurements %>%
+  group_by(accession_id) %>%
+  drop_na %>%
+  summarise(flowers_measured = n())
+
+app_df <- left_join(app_df, flower_measurements,
+                       by = c("accession" = "accession_id"))
+app_df[is.na(app_df)] <- 0
+  
+
+# Adding coordinate info for plotting -------------------------------------
+# Making some test plots here to get things up and running before 
+# transferring to the app.
+
+# First add x and y coordinates based on the bench position
+#   ┌────┬────┬────┬────┬────┐            ┌────┬────┬────┬────┬────┐
+#   │ 16 │ 17 │ 18 │ 19 │ 20 │            │1,4 │2,4 │3,4 │4,4 │5,4 │
+#   ├────┼────┼────┼────┼────┤            ├────┼────┼────┼────┼────┤
+#   │ 11 │ 12 │ 13 │ 14 │ 15 │   ─────╲   │1,3 │2,3 │3,3 │4,3 │5,3 │
+#   ├────┼────┼────┼────┼────┤   ─────╱   ├────┼────┼────┼────┼────┤
+#   │ 6  │ 7  │ 8  │ 9  │ 10 │            │1,2 │2,2 │3,2 │4,2 │5,2 │
+#   ├────┼────┼────┼────┼────┤            ├────┼────┼────┼────┼────┤
+#   │ 1  │ 2  │ 3  │ 4  │ 5  │            │1,1 │2,1 │3,1 │4,1 │5,1 │
+#   └────┴────┴────┴────┴────┘            └────┴────┴────┴────┴────┘
+
+# This is very tedious, but can't think of a faster way to do it
+app_df$x <- NA
+app_df$y <- NA
+
+app_df$x[app_df$position == 1] <- 1
+app_df$y[app_df$position == 1] <- 1
+
+app_df$x[app_df$position == 2] <- 2
+app_df$y[app_df$position == 2] <- 1
+
+app_df$x[app_df$position == 3] <- 3
+app_df$y[app_df$position == 3] <- 1
+
+app_df$x[app_df$position == 4] <- 4
+app_df$y[app_df$position == 4] <- 1
+
+app_df$x[app_df$position == 5] <- 5
+app_df$y[app_df$position == 5] <- 1
+
+app_df$x[app_df$position == 6] <- 1
+app_df$y[app_df$position == 6] <- 2
+
+app_df$x[app_df$position == 7] <- 2
+app_df$y[app_df$position == 7] <- 2
+
+app_df$x[app_df$position == 8] <- 3
+app_df$y[app_df$position == 8] <- 2
+
+app_df$x[app_df$position == 9] <- 4
+app_df$y[app_df$position == 9] <- 2
+
+app_df$x[app_df$position == 10] <- 5
+app_df$y[app_df$position == 10] <- 2
+
+app_df$x[app_df$position == 11] <- 1
+app_df$y[app_df$position == 11] <- 3
+
+app_df$x[app_df$position == 12] <- 2
+app_df$y[app_df$position == 12] <- 3
+
+app_df$x[app_df$position == 13] <- 3
+app_df$y[app_df$position == 13] <- 3
+
+app_df$x[app_df$position == 14] <- 4
+app_df$y[app_df$position == 14] <- 3
+
+app_df$x[app_df$position == 15] <- 5
+app_df$y[app_df$position == 15] <- 3
+
+app_df$x[app_df$position == 16] <- 1
+app_df$y[app_df$position == 16] <- 4
+
+app_df$x[app_df$position == 17] <- 2
+app_df$y[app_df$position == 17] <- 4
+
+app_df$x[app_df$position == 18] <- 3
+app_df$y[app_df$position == 18] <- 4
+
+app_df$x[app_df$position == 19] <- 4
+app_df$y[app_df$position == 19] <- 4
+
+app_df$x[app_df$position == 20] <- 5
+app_df$y[app_df$position == 20] <- 4
+
+
+
+# Making a test plot ------------------------------------------------------
+# This will be done in the app, but testing it here.
+ggplot(app_df[app_df$bench == 5, ], aes(x, y, 
+                                        fill = good_run_count_34,
+                                        label = paste0(accession, "\n", good_run_count_34))) +
+  geom_tile(color = "black", size = 2) +
+  geom_text(color = "black", fontface = "bold", size = 5) +
+  scale_fill_gradient(low = "white", 
+                      high = "#ff00f7",
+                      na.value = "green",
+                      lim = c(min(app_df$good_run_count_34), 7)) +
+  theme_void() +
+  theme(legend.position = "none")
+
+# For the heat stress just use blue for the gradient, and flowers like yellow or something
+
+
+# Making some temp sheets for ranking accessions --------------------------
+# Just for today I need some accessions to target, so I'll make a few temp
+# sheets here. I'll delete this later because the app will do it automatically.
+wave_3_34_top <- app_df[app_df$wave == "3", ]
+wave_3_34_top <- wave_3_34_top[order(wave_3_34_top$good_run_count_34), ]
+write_sheet(wave_3_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_3")
+
+wave_4_34_top <- app_df[app_df$wave == "4", ]
+wave_4_34_top <- wave_4_34_top[order(wave_4_34_top$good_run_count_34), ]
+write_sheet(wave_4_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_4")
+
+
+
+
+
+
 
 
 
