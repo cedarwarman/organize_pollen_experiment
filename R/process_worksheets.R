@@ -105,7 +105,8 @@ process_worksheet <- function(input_sheet_id){
 # if it has already been processed, but it doesn't take very long so I'm just 
 # leaving it).
 sheets <- list(November = "1j1lbNBOFVCyKuGLXUYDNSH0r_8Z5lV6JmFFgQOhk5Nw",
-               December = "12NXw2dRH6iRtq62KU3_w7R3FGQ5StdDr6pkfCuLP56Y")
+               December = "12NXw2dRH6iRtq62KU3_w7R3FGQ5StdDr6pkfCuLP56Y",
+               January = "1d1lk49XzVd6iRKDWsoF5BXMWeKX3OdS-CaO-fVlSYZk")
 
 output_df = data.frame()
 for (z in seq(1, length(sheets))){
