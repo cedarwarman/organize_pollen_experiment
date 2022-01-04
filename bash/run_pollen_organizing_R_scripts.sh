@@ -8,4 +8,7 @@ Rscript /home/cedar/git/organize_pollen_experiment/R/process_worksheets.R
 printf "\nBuilding pollen counting sheet\n"
 Rscript /home/cedar/git/organize_pollen_experiment/R/build_pollen_count_sheet.R
 
+printf "\nBuilding app sheet\n"
+Rscript /home/cedar/git/organize_pollen_experiment/R/build_pollen_app_sheet.R
+
 printf "\nFinished\n"

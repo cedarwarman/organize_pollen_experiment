@@ -4,7 +4,7 @@ R project to organize pollen experiment worksheets.
 ## Contents
 
 ### run_pollen_organizing_R_scripts.sh
-This bash script runs the following two R scripts. I have set it up to run each night using the following crontab line:
+This bash script runs the following three R scripts. I have set it up to run each night using the following crontab line:
 
     0 20 * * * bash ~/git/organize_pollen_experiment/bash/run_pollen_organizing_R_scripts.sh >> ~/.cron_log.txt 2>&1
 
@@ -13,6 +13,9 @@ This bash script runs the following two R scripts. I have set it up to run each 
 
 ### build_pollen_count_sheet.R
 **This R script is run second.** It pulls data from the output of the previous spreadsheet and puts it into a format that makes it easy to enter pollen count data for each well.
+
+### build_pollen_app_sheet.R
+**This R script is run third.** It pulls data from lots of different spreadsheets and makes a single spreadsheet for the pollen app to pull data from.
 
 ## Requirements
 For authorization, a JSON file identifying a Google service account with access to the spreadsheets must be present at "~/.credentials/google_sheets_api/service_account.json".
