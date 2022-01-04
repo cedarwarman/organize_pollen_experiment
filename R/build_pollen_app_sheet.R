@@ -123,6 +123,7 @@ app_df[is.na(app_df)] <- 0
 # This is very tedious, but can't think of a faster way to do it
 app_df$x <- NA
 app_df$y <- NA
+app_df$height <- 1
 
 app_df$x[app_df$position == 1] <- 1
 app_df$y[app_df$position == 1] <- 1
@@ -184,35 +185,48 @@ app_df$y[app_df$position == 19] <- 4
 app_df$x[app_df$position == 20] <- 5
 app_df$y[app_df$position == 20] <- 4
 
+# Fixing the coordinates for the end cases
+for (x in seq(1:8)){
+  # Left side
+  if(!any(app_df$bench == x & app_df$x == 1 & app_df$y == 3)){
+    app_df$y[app_df$bench == x & app_df$x == 1 & app_df$y == 2] <- 2.5
+  }
+  if(!any(app_df$bench == x & app_df$x == 5 & app_df$y == 3)){
+    app_df$y[app_df$bench == x & app_df$x == 5 & app_df$y == 2] <- 2.5
+  }
+}
+
+
+# Writing out the app df to a sheet ---------------------------------------
+write_sheet(app_df, "15oanRivQrhWl0EFmv4zxZqsIB1pLp9InEP43pjqkfGs", sheet = "Sheet1")
 
 
 # Making a test plot ------------------------------------------------------
 # This will be done in the app, but testing it here.
-ggplot(app_df[app_df$bench == 5, ], aes(x, y, 
-                                        fill = good_run_count_34,
-                                        label = paste0(accession, "\n", good_run_count_34))) +
-  geom_tile(color = "black", size = 2) +
-  geom_text(color = "black", fontface = "bold", size = 5) +
-  scale_fill_gradient(low = "white", 
-                      high = "#ff00f7",
-                      na.value = "green",
-                      lim = c(min(app_df$good_run_count_34), 7)) +
-  theme_void() +
-  theme(legend.position = "none")
-
+# ggplot(app_df[app_df$bench == 3, ], aes(x, y, 
+#                                         fill = good_run_count_34,
+#                                         label = paste0(accession, "\n", good_run_count_34))) +
+#   geom_tile(aes(height = height), color = "black", size = 2) +
+#   geom_text(color = "black", fontface = "bold", size = 5) +
+#   scale_fill_gradient(low = "white", 
+#                       high = "#ff00f7",
+#                       na.value = "green",
+#                       lim = c(min(app_df$good_run_count_34), 7)) +
+#   theme_void() +
+#   theme(legend.position = "none")
 # For the heat stress just use blue for the gradient, and flowers like yellow or something
 
 
 # Making some temp sheets for ranking accessions --------------------------
 # Just for today I need some accessions to target, so I'll make a few temp
 # sheets here. I'll delete this later because the app will do it automatically.
-wave_3_34_top <- app_df[app_df$wave == "3", ]
-wave_3_34_top <- wave_3_34_top[order(wave_3_34_top$good_run_count_34), ]
-write_sheet(wave_3_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_3")
-
-wave_4_34_top <- app_df[app_df$wave == "4", ]
-wave_4_34_top <- wave_4_34_top[order(wave_4_34_top$good_run_count_34), ]
-write_sheet(wave_4_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_4")
+# wave_3_34_top <- app_df[app_df$wave == "3", ]
+# wave_3_34_top <- wave_3_34_top[order(wave_3_34_top$good_run_count_34), ]
+# write_sheet(wave_3_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_3")
+# 
+# wave_4_34_top <- app_df[app_df$wave == "4", ]
+# wave_4_34_top <- wave_4_34_top[order(wave_4_34_top$good_run_count_34), ]
+# write_sheet(wave_4_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_4")
 
 
 
