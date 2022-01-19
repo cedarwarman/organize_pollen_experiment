@@ -103,6 +103,20 @@ flower_measurements <- flower_measurements %>%
 app_df <- left_join(app_df, flower_measurements,
                        by = c("accession" = "accession_id"))
 app_df[is.na(app_df)] <- 0
+
+# Adding frozen pollen counts
+frozen_pollen <- greenhouse_info[ , c("accession_id", "frozen_pollen")]
+app_df <- left_join(app_df, frozen_pollen,
+                    by = c("accession" = "accession_id"))
+app_df$frozen_pollen[is.na(app_df$frozen_pollen)] <- 0
+
+# Add factor for whether or not the accession is ready for frozen pollen 
+# collection.
+app_df$ready_for_frozen_pollen <- NA
+app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
+                               app_df$good_run_count_34 >= 8 &
+                               app_df$flowers_measured == 12] <- "ready"
+app_df$ready_for_frozen_pollen[is.na(app_df$ready_for_frozen_pollen)] <- "not_ready"
   
 
 # Adding coordinate info for plotting -------------------------------------
@@ -203,15 +217,16 @@ write_sheet(app_df, "15oanRivQrhWl0EFmv4zxZqsIB1pLp9InEP43pjqkfGs", sheet = "She
 
 # Making a test plot ------------------------------------------------------
 # This will be done in the app, but testing it here.
-# ggplot(app_df[app_df$bench == 3, ], aes(x, y, 
+# ggplot(app_df[app_df$bench == 5, ], aes(x, y,
 #                                         fill = good_run_count_34,
 #                                         label = paste0(accession, "\n", good_run_count_34))) +
 #   geom_tile(aes(height = height), color = "black", size = 2) +
 #   geom_text(color = "black", fontface = "bold", size = 5) +
-#   scale_fill_gradient(low = "white", 
+#   scale_fill_gradient(low = "white",
 #                       high = "#ff00f7",
 #                       na.value = "green",
-#                       lim = c(min(app_df$good_run_count_34), 7)) +
+#                       lim = c(0, 7)) +
+#   coord_fixed() +
 #   theme_void() +
 #   theme(legend.position = "none")
 # For the heat stress just use blue for the gradient, and flowers like yellow or something
@@ -222,10 +237,12 @@ write_sheet(app_df, "15oanRivQrhWl0EFmv4zxZqsIB1pLp9InEP43pjqkfGs", sheet = "She
 # sheets here. I'll delete this later because the app will do it automatically.
 # wave_3_34_top <- app_df[app_df$wave == "3", ]
 # wave_3_34_top <- wave_3_34_top[order(wave_3_34_top$good_run_count_34), ]
+# wave_3_34_top <- wave_3_34_top[ , 1:7]
 # write_sheet(wave_3_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_3")
 # 
 # wave_4_34_top <- app_df[app_df$wave == "4", ]
 # wave_4_34_top <- wave_4_34_top[order(wave_4_34_top$good_run_count_34), ]
+# wave_4_34_top <- wave_4_34_top[ , 1:7]
 # write_sheet(wave_4_34_top, "1u793jwMhifrHfm5vJIXA-in06ML8bhmYgJAup83glbk", sheet = "wave_4")
 
 
