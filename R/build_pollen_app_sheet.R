@@ -118,6 +118,16 @@ app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
                                app_df$flowers_measured == 12] <- "ready"
 app_df$ready_for_frozen_pollen[is.na(app_df$ready_for_frozen_pollen)] <- "not_ready"
   
+# Add factor for if the accession has been removed
+# (I also fill this one out last, after the plants have been removed)
+accession_removed_df <- greenhouse_info[ , c("accession_id", "hairy_style")]
+accession_removed_df$plant_removed <- NA
+accession_removed_df$plant_removed[is.na(accession_removed_df$hairy_style)] <- "plant_not_removed"
+accession_removed_df$plant_removed[!is.na(accession_removed_df$hairy_style)] <- "plant_removed"
+accession_removed_df <- accession_removed_df[ , c(1, 3)]
+app_df <- left_join(app_df, accession_removed_df,
+                    by = c("accession" = "accession_id"))
+
 
 # Adding coordinate info for plotting -------------------------------------
 # Making some test plots here to get things up and running before 
