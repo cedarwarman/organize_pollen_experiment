@@ -130,6 +130,3 @@ write_sheet(data = output_df,
 # I will make another script to produce a data entry Google Sheet to manually
 # look at the pollen counts for each well, then add that data to a visualization
 # and counting app so I know which accessions need more plants
-
-
-       

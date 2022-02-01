@@ -29,8 +29,11 @@ greenhouse_info_url <- "1ZJxIig0rGVVXgvLTO8SjPY2A9y3itntssLxHtGn7mSU"
 flower_url <- "1YAbstZeZfTu6bItHQXVr02WrD1JmNNvn4dd-m88omLY"
 
 # Need to read all the tabs in the bench layouts sheet
+wave_vec <- c("wave_x", "wave_5", "wave_6", "wave_7")
 bench_layout <- bind_rows(lapply(tail(sheet_names(bench_url), 4), function(x){
-  read_sheet(bench_url, sheet = x)
+  if (x %in% wave_vec) {
+    read_sheet(bench_url, sheet = x)
+  }
 }))
 
 # Same for the flower measurements
