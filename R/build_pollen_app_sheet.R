@@ -112,6 +112,7 @@ frozen_pollen <- greenhouse_info[ , c("accession_id", "frozen_pollen")]
 app_df <- left_join(app_df, frozen_pollen,
                     by = c("accession" = "accession_id"))
 app_df$frozen_pollen[is.na(app_df$frozen_pollen)] <- 0
+app_df <- app_df %>% distinct()
 
 # Add factor for whether or not the accession is ready for frozen pollen 
 # collection.
@@ -130,7 +131,7 @@ accession_removed_df$plant_removed[!is.na(accession_removed_df$hairy_style)] <- 
 accession_removed_df <- accession_removed_df[ , c(1, 3)]
 app_df <- left_join(app_df, accession_removed_df,
                     by = c("accession" = "accession_id"))
-
+app_df <- app_df %>% distinct()
 
 # Adding coordinate info for plotting -------------------------------------
 # Making some test plots here to get things up and running before 
