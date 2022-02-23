@@ -116,11 +116,14 @@ app_df$frozen_pollen[is.na(app_df$frozen_pollen)] <- 0
 app_df <- app_df %>% distinct()
 
 # Add factor for whether or not the accession is ready for frozen pollen 
-# collection.
+# collection. Also if the pollen is finished.
 app_df$ready_for_frozen_pollen <- NA
 app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
                                app_df$good_run_count_34 >= 8 &
                                app_df$flowers_measured == 12] <- "ready"
+app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
+                               app_df$good_run_count_34 >= 8 &
+                               app_df$flowers_measured < 12] <- "pollen_finished"
 app_df$ready_for_frozen_pollen[is.na(app_df$ready_for_frozen_pollen)] <- "not_ready"
   
 # Add factor for if the accession has been removed
