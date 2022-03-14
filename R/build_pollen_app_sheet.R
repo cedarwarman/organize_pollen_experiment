@@ -135,6 +135,10 @@ app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
                                app_df$good_run_count_34 >= 8 &
                                app_df$flowers_measured < 12] <- "pollen_finished"
 app_df$ready_for_frozen_pollen[is.na(app_df$ready_for_frozen_pollen)] <- "not_ready"
+
+# Adding an exception for CW0000, I always want these flowers trimmed, so I don't 
+# ever want a marked for it being finished (which comes from this factor in the app)
+app_df$ready_for_frozen_pollen[app_df$accession == "CW0000"] <- "not_ready"
   
 # Add factor for if the accession has been removed
 # (I also fill this one out last, after the plants have been removed)
