@@ -121,9 +121,9 @@ app_df$ready_for_frozen_pollen <- NA
 app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
                                app_df$good_run_count_34 >= 8 &
                                app_df$flowers_measured == 12] <- "ready"
-# app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
-#                                app_df$good_run_count_34 >= 8 &
-#                                app_df$flowers_measured < 12] <- "pollen_finished"
+app_df$ready_for_frozen_pollen[app_df$good_run_count_26 >= 8 &
+                               app_df$good_run_count_34 >= 8 &
+                               app_df$flowers_measured < 12] <- "pollen_finished"
 app_df$ready_for_frozen_pollen[is.na(app_df$ready_for_frozen_pollen)] <- "not_ready"
   
 # Add factor for if the accession has been removed
@@ -230,7 +230,11 @@ for (x in seq(1:8)){
 
 
 # Writing out the app df to a sheet ---------------------------------------
+# This is the real sheet
 write_sheet(app_df, "15oanRivQrhWl0EFmv4zxZqsIB1pLp9InEP43pjqkfGs", sheet = "Sheet1")
+
+# This is a sheet for testing, should be commented out
+# write_sheet(app_df, "1b2TgPBwmNqq-RkeSDeP4nS60JQ7QZCPP8G4u6s98d1c", sheet = "Sheet1")
 
 
 # Making a test plot ------------------------------------------------------
