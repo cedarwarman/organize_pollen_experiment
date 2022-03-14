@@ -110,10 +110,20 @@ app_df[is.na(app_df)] <- 0
 
 # Adding frozen pollen counts
 frozen_pollen <- greenhouse_info[ , c("accession_id", "frozen_pollen")]
+# I was running into a bug here where there were two copies of the same accession
+# that got replanted. One had n number of frozen pollen samples, one had NA for 
+# none. Before I made the NA 0 after joining, but now I'll make it 0 before then 
+# add up the numbers (which should always just be 0 plus a number) to collapse the
+# duplicates. I can't just remove the NAs because then I'll lose some. Although now
+# that I'm thinking about it, maybe a better join would just make NA's for the ones 
+# without pairs, which would be zero? Would be slightly more efficient. Tried it.
+# Will probably have to make an exception if I collect frozen pollen from more than 
+# one wave for the same accession, will probably only happen with CW0000.
+frozen_pollen <- frozen_pollen[complete.cases(frozen_pollen), ]
 app_df <- left_join(app_df, frozen_pollen,
                     by = c("accession" = "accession_id"))
 app_df$frozen_pollen[is.na(app_df$frozen_pollen)] <- 0
-app_df <- app_df %>% distinct()
+app_df <- app_df %>% distinct() # I don't think this is necessary anymore
 
 # Add factor for whether or not the accession is ready for frozen pollen 
 # collection. Also if the pollen is finished.
