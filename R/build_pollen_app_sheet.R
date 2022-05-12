@@ -147,8 +147,15 @@ accession_removed_df$plant_removed <- NA
 accession_removed_df$plant_removed[is.na(accession_removed_df$hairy_style)] <- "plant_not_removed"
 accession_removed_df$plant_removed[!is.na(accession_removed_df$hairy_style)] <- "plant_removed"
 accession_removed_df <- accession_removed_df[ , c(1, 3)]
+
 app_df <- left_join(app_df, accession_removed_df,
                     by = c("accession" = "accession_id"))
+app_df <- app_df %>% distinct()
+
+# Running into a problem where some plants have been planted twice, so the most recent
+# plantings haven't actually been removed. Just fixing this manually here.
+not_actually_removed <- c("CW1005", "CW1003", "CW0024", "CW0023", "CW0022", "CW0019", "CW0020")
+app_df$plant_removed[app_df$accession %in% not_actually_removed] <- "plant_not_removed"
 app_df <- app_df %>% distinct()
 
 # Adding coordinate info for plotting -------------------------------------
