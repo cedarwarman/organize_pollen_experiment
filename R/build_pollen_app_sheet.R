@@ -250,6 +250,85 @@ for (x in seq(1:8)){
 }
 
 
+# Manually resetting counts for camera change -----------------------------
+# I got a new camera, so I want to reset the partially phenotyped accessions
+# that I did with the old camera (PMT trans). I'll do it manually here based
+# on the counts as of 2022-05-25.
+
+# Bench 7
+app_df$good_run_count_26[app_df$accession == "CW0158"] <- app_df$good_run_count_26[app_df$accession == "CW0158"] - 12
+app_df$good_run_count_34[app_df$accession == "CW0158"] <- app_df$good_run_count_34[app_df$accession == "CW0158"] - 5
+
+app_df$good_run_count_26[app_df$accession == "CW0162"] <- app_df$good_run_count_26[app_df$accession == "CW0162"] - 6
+app_df$good_run_count_34[app_df$accession == "CW0162"] <- app_df$good_run_count_34[app_df$accession == "CW0162"] - 6
+
+app_df$good_run_count_26[app_df$accession == "CW0163"] <- app_df$good_run_count_26[app_df$accession == "CW0163"] - 4
+app_df$good_run_count_34[app_df$accession == "CW0163"] <- app_df$good_run_count_34[app_df$accession == "CW0163"] - 5
+
+app_df$good_run_count_26[app_df$accession == "CW0164"] <- app_df$good_run_count_26[app_df$accession == "CW0164"] - 5
+app_df$good_run_count_34[app_df$accession == "CW0164"] <- app_df$good_run_count_34[app_df$accession == "CW0164"] - 5
+
+app_df$good_run_count_26[app_df$accession == "CW0165"] <- app_df$good_run_count_26[app_df$accession == "CW0165"] - 4
+app_df$good_run_count_34[app_df$accession == "CW0165"] <- app_df$good_run_count_34[app_df$accession == "CW0165"] - 7
+
+# Bench 5
+app_df$good_run_count_26[app_df$accession == "CW0170"] <- app_df$good_run_count_26[app_df$accession == "CW0170"] - 5
+app_df$good_run_count_34[app_df$accession == "CW0170"] <- app_df$good_run_count_34[app_df$accession == "CW0170"] - 8
+
+app_df$good_run_count_26[app_df$accession == "CW0169"] <- app_df$good_run_count_26[app_df$accession == "CW0169"] - 4
+app_df$good_run_count_34[app_df$accession == "CW0169"] <- app_df$good_run_count_34[app_df$accession == "CW0169"] - 8
+
+app_df$good_run_count_26[app_df$accession == "CW0168"] <- app_df$good_run_count_26[app_df$accession == "CW0168"] - 2
+app_df$good_run_count_34[app_df$accession == "CW0168"] <- app_df$good_run_count_34[app_df$accession == "CW0168"] - 10
+
+app_df$good_run_count_26[app_df$accession == "CW0167"] <- app_df$good_run_count_26[app_df$accession == "CW0167"] - 1
+app_df$good_run_count_34[app_df$accession == "CW0167"] <- app_df$good_run_count_34[app_df$accession == "CW0167"] - 2
+
+app_df$good_run_count_26[app_df$accession == "CW0166"] <- app_df$good_run_count_26[app_df$accession == "CW0166"] - 1
+app_df$good_run_count_34[app_df$accession == "CW0166"] <- app_df$good_run_count_34[app_df$accession == "CW0166"] - 8
+
+app_df$good_run_count_26[app_df$accession == "CW0171"] <- app_df$good_run_count_26[app_df$accession == "CW0171"] - 4
+app_df$good_run_count_34[app_df$accession == "CW0171"] <- app_df$good_run_count_34[app_df$accession == "CW0171"] - 1
+
+app_df$good_run_count_26[app_df$accession == "CW0160"] <- app_df$good_run_count_26[app_df$accession == "CW0160"] - 3
+app_df$good_run_count_34[app_df$accession == "CW0160"] <- app_df$good_run_count_34[app_df$accession == "CW0160"] - 5
+
+app_df$good_run_count_26[app_df$accession == "CW0172"] <- app_df$good_run_count_26[app_df$accession == "CW0172"] - 3
+app_df$good_run_count_34[app_df$accession == "CW0172"] <- app_df$good_run_count_34[app_df$accession == "CW0172"] - 3
+
+app_df$good_run_count_26[app_df$accession == "CW1032"] <- app_df$good_run_count_26[app_df$accession == "CW1032"] - 2
+app_df$good_run_count_34[app_df$accession == "CW1032"] <- app_df$good_run_count_34[app_df$accession == "CW1032"] - 4
+
+app_df$good_run_count_26[app_df$accession == "CW1033"] <- app_df$good_run_count_26[app_df$accession == "CW1033"] - 1
+app_df$good_run_count_34[app_df$accession == "CW1033"] <- app_df$good_run_count_34[app_df$accession == "CW1033"] - 0
+
+# Bench 3
+app_df$good_run_count_34[app_df$accession == "CW0006"] <- app_df$good_run_count_34[app_df$accession == "CW0006"] - 2
+
+# Bench 1
+app_df$good_run_count_34[app_df$accession == "CW1001"] <- app_df$good_run_count_34[app_df$accession == "CW1001"] - 3
+
+app_df$good_run_count_34[app_df$accession == "CW0002"] <- app_df$good_run_count_34[app_df$accession == "CW0002"] - 2
+
+# Bench 6
+app_df$good_run_count_26[app_df$accession == "CW1005"] <- app_df$good_run_count_26[app_df$accession == "CW1005"] - 12
+app_df$good_run_count_34[app_df$accession == "CW1005"] <- app_df$good_run_count_34[app_df$accession == "CW1005"] - 6
+
+app_df$good_run_count_34[app_df$accession == "CW1007"] <- app_df$good_run_count_34[app_df$accession == "CW1007"] - 2
+
+# Bench 8
+app_df$good_run_count_34[app_df$accession == "CW1016"] <- app_df$good_run_count_34[app_df$accession == "CW1016"] - 2
+
+app_df$good_run_count_26[app_df$accession == "CW0020"] <- app_df$good_run_count_26[app_df$accession == "CW0020"] - 2
+
+app_df$good_run_count_34[app_df$accession == "CW0012"] <- app_df$good_run_count_34[app_df$accession == "CW0012"] - 3
+
+app_df$good_run_count_34[app_df$accession == "CW0011"] <- app_df$good_run_count_34[app_df$accession == "CW0011"] - 3
+
+
+
+
+
 # Writing out the app df to a sheet ---------------------------------------
 # This is the real sheet
 write_sheet(app_df, "15oanRivQrhWl0EFmv4zxZqsIB1pLp9InEP43pjqkfGs", sheet = "Sheet1")
