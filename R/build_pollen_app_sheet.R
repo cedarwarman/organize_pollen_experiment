@@ -317,7 +317,7 @@ app_df$good_run_count_34[app_df$accession == "CW1005"] <- app_df$good_run_count_
 app_df$good_run_count_34[app_df$accession == "CW1007"] <- app_df$good_run_count_34[app_df$accession == "CW1007"] - 2
 
 # Bench 8
-app_df$good_run_count_34[app_df$accession == "CW1016"] <- app_df$good_run_count_34[app_df$accession == "CW1016"] - 2
+app_df$good_run_count_34[app_df$accession == "CW0016"] <- app_df$good_run_count_34[app_df$accession == "CW0016"] - 2
 
 app_df$good_run_count_26[app_df$accession == "CW0020"] <- app_df$good_run_count_26[app_df$accession == "CW0020"] - 2
 
