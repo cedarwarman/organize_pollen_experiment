@@ -110,7 +110,8 @@ sheets <- list(November = "1j1lbNBOFVCyKuGLXUYDNSH0r_8Z5lV6JmFFgQOhk5Nw",
                February = "1kGYtaJf1vGXwQH_6Spuo1auYpaHvuoyGaEDZVnM620s",
                March = "1EEqrDNeKjmyKEPGlN8n3u9QBvDAIVUUjKDnfjhMqe4w",
                April = "1VWmDrU0lW18gFXRPms3riQxAbpB_YTgK594xd8nReF4",
-               May = "13EvxUjv9QBjzYXRyYEgl42isbsfyP8wCe6SQ2-D1cRA")
+               May = "13EvxUjv9QBjzYXRyYEgl42isbsfyP8wCe6SQ2-D1cRA",
+               June = "1AaVCJiKIECQQ-dHiqzGfTuMeymjcJC2LdYRYLWT7T4E")
 
 output_df = data.frame()
 for (z in seq(1, length(sheets))){
